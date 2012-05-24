@@ -1,0 +1,17 @@
+#hubspot_hubfeed_widget {
+    
+}
+#hubspot_hubfeed_widget table {
+    width: 100%;
+    
+}
+#hubspot_hubfeed_widget table tr td {
+    padding:3px;
+}
+#hubspot_hubfeed_widget .hubfeed_content{
+    margin:10px 0 10px 0;
+    padding:3px;
+    background-color: #e6e4e4;
+    border: 1px solid #ccccff;
+    width: 100%;
+}
