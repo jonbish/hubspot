@@ -1,9 +1,9 @@
 === HubSpot for WordPress ===
-Contributors: bwhalley, JonBishop, hubspot
+Contributors: JonBishop
 Tags: analytics, hubspot, tracking code, feedburner, action, call to action, team, about, contact, form, leads, api, shortcode, widget, dashboard, post, admin, sidebar, twitter, page, inbound, business, marketing, google map, call to action, cta, ad manager
 Requires at least: 2.9
-Tested up to: 3.2.1
-Stable tag: 1.5.6
+Tested up to: 3.4.1
+Stable tag: 1.6
 
 Allows WordPress users to take advantage of HubSpot lead nurturing, website analytics, and assorted features of the HubSpot CMS.
 
@@ -172,6 +172,11 @@ HubSpot collects usage information about this plugin, so that we can better serv
 5. Visual Editor pop-up for inserting shortcodes
 
 == Changelog ==
+
+= 1.6 =
+* New analytics code
+* Changed how CTAs get loaded into shortcode modal
+
 = 1.5.6 =
 * Resetting post wp_query after call to action query
 * Cleaned up admin settings area

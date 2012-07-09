@@ -2,13 +2,13 @@
 /*
 Plugin Name: HubSpot for WordPress
 Description: The HubSpot for WordPress plugin integrates the power of HubSpot with your WordPress site
-Author: HubSpot
-Version: 1.5.6
+Author: Jon Bishop
+Version: 1.6
 Requires at least: 2.9
 Author URI: http://www.hubspot.com
 License: GPL
 */
-/*  Copyright 2011  HubSpot  (email : jbishop@hubspot.com)
+/*  Copyright 2011  HubSpot  (email : jonbish@gmail.com)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License, version 2, as 

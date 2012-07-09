@@ -294,12 +294,16 @@ $myhubspotusage->check_shortcode('Display shortcode popup');
                  <tr><td><ul>
                 <?php
                 $args = array('post_type' => 'hs-action', 'numberposts' => -1);
-                $hs_actions = get_posts($args);
-                foreach ($hs_actions as $hs_action) {
-                    setup_postdata($hs_action); ?>
-                    <li class="checkbox"><label class="selectit" for="hs-action-<?php _e($hs_action->ID); ?>"><input type="checkbox" name="hs_action" id ="hs-action-<?php _e($hs_action->ID); ?>" value="<?php _e($hs_action->ID); ?>"/> <span><?php _e($hs_action->post_title); ?></span></label></li>
-                    <?php
-                }
+                $hs_actions = new WP_Query($args);
+                global $post;
+                if($hs_actions->have_posts()):
+                    while ($hs_actions->have_posts()):
+                        $hs_actions->the_post(); ?>
+                        <li class="checkbox"><label class="selectit" for="hs-action-<?php _e($post->ID); ?>"><input type="checkbox" name="hs_action" id ="hs-action-<?php _e($post->ID); ?>" value="<?php _e($post->ID); ?>"/> <span><?php _e($post->post_title); ?></span></label></li>
+                        <?php
+                    endwhile;
+                endif;
+                wp_reset_query();
                 ?>
                 </ul></td></tr>
                 <tr><td scope="row">

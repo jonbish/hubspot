@@ -1,30 +1,65 @@
 <?php
 class WPHubspotAnalytics {
-	
-	function WPHubspotAnalytics() {
-		// Analytics Hook
-		if(is_admin()){
-			//
-		} else {
-			add_action('wp_footer', array(&$this, 'hs_analytics_insert'));
-		}
-	}
-	//=============================================
-	// Insert tracking code
-	//=============================================
-	function hs_analytics_insert() {	
-		$hs_settings = array();
-		$hs_settings = get_option('hs_settings');
-		if ( $hs_settings["hs_portal"] != "" && $hs_settings["hs_appdomain"] != "" ) { 
-			echo "\n".'<!-- HubSpot Analytics for WordPress | http://success.hubspot.com/ -->'."\n";
-			echo '<script type="text/javascript" language="javascript">'."\n";
-			echo "\t".'var hs_portalid = '.$hs_settings["hs_portal"].';'."\n";
-			echo "\t".'var hs_salog_version = "2.00";'."\n";
-			echo "\t".'var hs_ppa = "'.$hs_settings["hs_appdomain"].'";'."\n";	
-			echo "\t"."document.write(unescape(\"%3Cscript src='\" + document.location.protocol + \"//\" + hs_ppa + \"/salog.js.aspx' type='text/javascript'%3E%3C/script%3E\"));"."\n";							
-			echo '</script>'."\n";
-			echo '<!-- End of HubSpot Analytics code -->'."\n";
-		}
-	}
+
+    function WPHubspotAnalytics() {
+        // Analytics Hook
+        if (is_admin()) {
+            //
+        } else {
+            add_action('wp_footer', array(&$this, 'hs_analytics_insert'));
+        }
+    }
+
+    //=============================================
+    // Insert tracking code
+    //=============================================
+    function hs_analytics_insert() {
+        global $current_user;
+        get_currentuserinfo();
+        $hs_settings = array();
+        $hs_settings = get_option('hs_settings');
+        if ($hs_settings["hs_portal"] != "") {
+            echo "\n" . '<!-- Start of Async HubSpot Analytics Code -->' . "\n";
+            echo '<script type="text/javascript">' . "\n";
+            echo 'var _hsq = _hsq || [];' . "\n";
+
+            // Pass along the correct content-type
+            if (is_page()) {
+                echo '_hsq.push(["setContentType", "standard-page"]);' . "\n";
+            } else {
+                echo '_hsq.push(["setContentType", "blog-post"]);' . "\n";
+            }
+
+            // Identify the current user if logged in
+            if ($current_user->user_email) {
+                echo "_hsq.push([\"identify\", {\n";
+                echo "\"email\" : \"" . $current_user->user_email . "\",\n";
+                echo "\"name\" : \"" . $current_user->user_login . "\",\n";
+                echo "\"id\" : \"" . md5($current_user->user_email) . "\"\n";
+                echo "}]);\n";
+                stathat_ez_count('wordpress-identified-user', 1);
+            } else {
+                // See if current user is a commenter
+                $commenter = wp_get_current_commenter();
+                if ($commenter['comment_author_email']) {
+                    echo "_hsq.push([\"identify\", {\n";
+                    echo "\"email\" : \"" . $commenter['comment_author_email'] . "\",\n";
+                    echo "\"name\" : \"" . $commenter['comment_author'] . "\",\n";
+                    echo "\"id\" : \"" . md5($commenter['comment_author_email']) . "\"\n";
+                    echo "}]);\n";
+                    stathat_ez_count('wordpress-identified-user', 1);
+                }
+            }
+
+            echo "\t" . '(function(d,s,i,r) {' . "\n";
+            echo "\t" . 'if (d.getElementById(i)){return;}' . "\n";
+            echo "\t" . 'var n = d.createElement(s),e = document.getElementsByTagName(s)[0];' . "\n";
+            echo "\t" . 'n.id=i;n.src = \'//js.hubspot.com/analytics/\'+(Math.ceil(new Date()/r)*r)+\'/' . trim($hs_settings["hs_portal"]) . '.js\';' . "\n";
+            echo "\t" . 'e.parentNode.insertBefore(n, e);' . "\n";
+            echo "\t" . '})(document, "script", "hs-analytics",300000);' . "\n";
+            echo '</script>' . "\n";
+            echo '<!-- End of Async HubSpot Analytics Code -->' . "\n";
+        }
+    }
 }
 ?>
